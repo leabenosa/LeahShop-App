@@ -1,0 +1,61 @@
+
+[
+    {
+    "id": 1,
+    "name": "Dream Cake",
+    "category": "Pastries",
+    "price": 80.0 
+    },
+    {
+     "id": 2,
+    "name": "Chocolate Crinkles",
+    "category": "Pastries",
+    "price": 100.0
+     },
+    { "id": 3,
+      "name": "Creamcheese Ensaymada 6PCS",
+      "category": "Breads", 
+      "price": 230.0
+     },
+     { "id": 4,
+      "name": "Creamcheese Ensaymada 4PCS",
+      "category": "Breads", 
+      "price": 160.0
+     },
+     { "id": 5,
+      "name": "Creamcheese Ensaymada Solo",
+      "category": "Breads", 
+      "price": 45.0
+     },
+     {
+    "id": 6, 
+    "name": "Chocolate Mousse Cake", 
+    "category": "Cakes", 
+    "price": 700.0
+    },
+    { "id": 7,
+     "name": "Ube Mousse Cake",
+      "category": "Cakes",
+       "price": 700.0
+    },
+    { "id": 8,
+     "name": "Cheese Mousse Cake",
+      "category": "Cakes",
+       "price": 700.0
+    },
+    { "id": 9,
+     "name": "Red Velvet Mousse Cake",
+      "category": "Cakes",
+       "price": 700.0
+    },
+        { "id": 10,
+     "name": "Cupcake Half Dozen",
+      "category": "Cupcakes",
+       "price": 150.0
+    },
+    { "id": 11,
+     "name": "Cupcake One Dozen",
+      "category": "Cupcakes",
+       "price": 250.0
+    }
+]
