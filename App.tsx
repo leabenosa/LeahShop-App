@@ -13,8 +13,14 @@ interface Product {
 export default function App() {
   const [products] = useState<Product[]>(productsData);
   const [filtered, setFiltered] = useState<Product[]>(productsData);
-
   const categories = [...new Set(productsData.map(p => p.category))];
+  const categoryColors: Record<string, string> = {
+  Pastries: '#f9d6faff',   
+  Breads: '#ec9ce2ff',     
+  Cakes: '#fc72a0ff',     
+  Cupcakes: '#fa8fc5ff',  
+};
+
   const maxPrice = products.length > 0 
   ? Math.max(...products.map(p => p.price)) 
   : 0;
@@ -66,18 +72,29 @@ export default function App() {
       <View style={styles.filters}> 
         <Text style={styles.filterTitle}>Categories</Text> 
         <View style={styles.categoryList}>
-          {categories.map(cat => (
-            <TouchableOpacity key={cat} style={styles.checkboxContainer} onPress={() => toggleCategory(cat)}>
-              <View style={styles.checkboxRow}>
-                <Text style={styles.checkboxText}>
-                {selectedCategories.includes(cat) ? '☑' : '☐'}
-                </Text>
-                <Text>{cat}</Text>
-            </View>
+         
+        {categories.map(cat => (
+  <TouchableOpacity
+    key={cat}
+    style={styles.checkboxContainer}
+    onPress={() => toggleCategory(cat)}
+  >
+    <View
+      style={[
+        styles.checkboxRow,
+        { backgroundColor: categoryColors[cat] || '#ccc' },
+        selectedCategories.includes(cat) && styles.selectedCheckboxRow
+      ]}
+      
+    >
+      <Text style={styles.checkboxText}>
+        {selectedCategories.includes(cat) ? '☑' : '☐'}
+      </Text>
+      <Text>{cat}</Text>
+    </View>
+  </TouchableOpacity>
+))}
 
-
-            </TouchableOpacity>
-          ))}
         </View>
 
         <Text style={styles.filterTitle}>Price Range</Text>
@@ -166,13 +183,24 @@ export default function App() {
         data={filtered}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.flatListContent}
-        renderItem={({ item }) => (
-          <View style={styles.productCard}>
-            <Text style={styles.productName}>{item.name}</Text>
-            <Text>Category: {item.category}</Text>
-            <Text>Price: {item.price.toFixed(2)}</Text>
-          </View>
-        )}
+  
+   renderItem={({ item }) => {
+  const categoryStyle = {
+    backgroundColor: categoryColors[item.category] || '#fff', 
+    borderLeftColor: categoryColors[item.category] || '#ccc',
+    borderLeftWidth: 4,
+  };
+
+  return (
+    <View style={[styles.productCard, categoryStyle]}>
+      <Text style={styles.productName}>{item.name}</Text>
+      <Text style={styles.categoryText}>{item.category}</Text>
+      <Text>₱{item.price.toFixed(2)}</Text>
+    </View>
+  );
+}}
+
+
       />
     </SafeAreaView>
   );
@@ -222,16 +250,6 @@ const styles = StyleSheet.create
   { flexDirection: 'row', 
     justifyContent: 'space-between',
     marginVertical: 5,
-  },
-  productCard: 
-  { backgroundColor: 'white', 
-    padding: 10, 
-    borderRadius: 8, 
-    marginBottom: 5 
-  },
-  productName: 
-  { fontWeight: 'bold', 
-    fontSize: 16 
   },
   flatListContent: {
     paddingBottom: 20,
@@ -284,15 +302,44 @@ activeSortButtonText: {
   },
   arrowText: {
     fontSize: 14
-  },
-  checkboxText: {
-  fontSize: 24,
-  marginRight: 0,
 },
-checkboxRow: {
+  checkboxRow: {
   flexDirection: 'row',
   alignItems: 'center',
-}
-
+  padding: 8,
+  borderRadius: 6,
+  marginBottom: 0,
+  marginRight: -15,
+  borderWidth: 1,
+  borderColor: 'transparent',
+},
+selectedCheckboxRow: {
+  borderWidth: 2,
+  borderColor: 'black',
+},
+  checkboxText: {
+    fontSize: 18,
+    marginRight: 1,
+  },
+  productCard: {
+    padding: 10,
+    marginBottom: 8,
+    backgroundColor: '#fff',
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  productName: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  categoryText: 
+  {
+    fontSize: 14,
+  }
 });
+
 
