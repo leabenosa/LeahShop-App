@@ -68,7 +68,14 @@ export default function App() {
         <View style={styles.categoryList}>
           {categories.map(cat => (
             <TouchableOpacity key={cat} style={styles.checkboxContainer} onPress={() => toggleCategory(cat)}>
-              <Text>{selectedCategories.includes(cat) ? '☑' : '☐'} {cat}</Text>
+              <View style={styles.checkboxRow}>
+                <Text style={styles.checkboxText}>
+                {selectedCategories.includes(cat) ? '☑' : '☐'}
+                </Text>
+                <Text>{cat}</Text>
+            </View>
+
+
             </TouchableOpacity>
           ))}
         </View>
@@ -278,5 +285,14 @@ activeSortButtonText: {
   arrowText: {
     fontSize: 14
   },
+  checkboxText: {
+  fontSize: 24,
+  marginRight: 0,
+},
+checkboxRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+}
+
 });
 
