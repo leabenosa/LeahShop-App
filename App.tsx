@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ProductList from './ProductList';
-import ProductDetails from './ProductDetails';
+import ProductList from './screens/ProductList';
+import ProductDetails from './screens/ProductDetails';
 
 export type RootStackParamList = {
   ProductList: undefined;
@@ -20,7 +20,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='ProductList'>
+      <Stack.Navigator initialRouteName={"ProductList" as keyof RootStackParamList}>
         <Stack.Screen
           name="ProductList"
           component={ProductList}
