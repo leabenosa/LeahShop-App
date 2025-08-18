@@ -66,7 +66,7 @@ export default function ProductList() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('./assets/logo.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.shopName}>Leah’s Shop</Text>
       </View>
 
