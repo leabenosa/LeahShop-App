@@ -6,6 +6,7 @@ import ProductDetails from './screens/ProductDetails';
 import { RootStackParamList } from './types/navigation';
 import { CartProvider } from "./context/CartContext";
 import CartScreen from './screens/CartScreen';
+import { CartIcon } from "./components/CartIcon"; 
 
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -18,12 +19,18 @@ export default function App() {
         <Stack.Screen
           name="ProductList"
           component={ProductList}
-          options={{ title: "Leah's Shop" }}
+          options={({ navigation }) => ({
+          title: "Leah's Shop",
+          headerRight: () => <CartIcon navigation={navigation} />,
+          })}
         />
         <Stack.Screen
           name="ProductDetails"
           component={ProductDetails}
-          options={{ title: "Product Details" }}
+          options={({ navigation }) => ({
+             title: "Product Details",
+            headerRight:() => <CartIcon navigation={navigation} />,
+           })}
         />
          <Stack.Screen
             name="Cart"
