@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Button } from "react-native";
-import type { RootStackParamList } from '../types/navigation';
+import type { RootStackParamList } from "../types/navigation";
 import type { StackScreenProps } from "@react-navigation/stack";
-
 
 type Props = StackScreenProps<RootStackParamList, "ProductDetails">;
 
@@ -16,9 +15,10 @@ export default function ProductDetails({ route }: Props) {
         style={styles.image}
         resizeMode="cover"
       />
+
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.category}>{category}</Text>
-      <Text style={styles.price}>{`₱${price.toFixed(2)}`}</Text>
+      <Text style={styles.price}>₱{price.toFixed(2)}</Text>
       <Text style={styles.description}>{description}</Text>
 
       <Button
@@ -36,28 +36,35 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 200,
     alignSelf: "center",
     marginBottom: 20,
+    borderRadius: 12,
   },
   name: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     marginBottom: 8,
+    textAlign: "center",
   },
   category: {
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 8,
     color: "#888",
+    textAlign: "center",
   },
   price: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     marginBottom: 12,
+    textAlign: "center",
+    color: "#e91e63",
   },
   description: {
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 20,
+    lineHeight: 22,
+    textAlign: "center",
   },
 });
