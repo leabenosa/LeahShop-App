@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image, Button } from "react-native";
 import type { RootStackParamList } from '../types/navigation';
 import type { StackScreenProps } from "@react-navigation/stack";
+import { useCart } from "../context/CartContext";
 
 type Props = StackScreenProps<RootStackParamList, "ProductDetails">;
 
@@ -12,11 +13,19 @@ const categoryColors: Record<string, string> = {
   Cupcakes: '#fa8fc5ff',
 };
 
-export default function ProductDetails({ route }: Props) {
-  const { name, category, price, description, imageUri } = route.params;
+export default function ProductDetails({ route, navigation }: Props) {
+const { name, category, price, description, imageUri, id } = route.params;
+const { addToCart } = useCart();
 
   return (
     <View style={styles.container}>
+      <Button
+        title="Add to Cart"
+        onPress={() => {
+          addToCart({ id, name, category, price, description, imageUri });
+          navigation.navigate("Cart");
+        }}
+      />
       <Image
         source={{ uri: imageUri ?? "https://via.placeholder.com/150" }}
         style={styles.image}
