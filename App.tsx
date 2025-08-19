@@ -7,11 +7,11 @@ import ProductDetails from './screens/ProductDetails';
 export type RootStackParamList = {
   ProductList: undefined;
   ProductDetails: { 
-    id: number;
     name: string;
     category: string;
     price: number;
     description: string; 
+    imageUri?: string;
   };
 };
 
@@ -26,11 +26,11 @@ export default function App() {
           component={ProductList}
           options={{ title: "Leah's Shop" }}
         />
-        <>stack.Screen
-          name="ProductDetails
+        <Stack.Screen
+          name="ProductDetails"
           component={ProductDetails}
           options={{ title: "Product Details" }}
-          </>
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
