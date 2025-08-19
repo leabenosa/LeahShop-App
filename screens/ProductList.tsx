@@ -18,8 +18,8 @@ type ProductListNavigationProp = StackNavigationProp<RootStackParamList, 'Produc
 export default function ProductList({ navigation }: { navigation: ProductListNavigationProp }) {
 
   const [products] = useState<Product[]>(productsData);
-  const [filtered, setFiltered] = useState<Product[]>(productsData);
-  const categories = [...new Set(productsData.map(p => p.category))];
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(productsData);
+  const categories = [...new Set(productsData.map(product => product.category))];
   const categoryColors: Record<string, string> = {
     Pastries: '#f9d6faff',   
     Breads: '#ec9ce2ff',     
@@ -28,36 +28,36 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
   };
 
   const maxPrice = products.length > 0 
-    ? Math.max(...products.map(p => p.price)) 
+    ? Math.max(...products.map(product => product.price)) 
     : 0;
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice]);
   const [sortOption, setSortOption] = useState<string>('');
 
   const filterAndSort = useCallback(() => {
-    let list = [...products];
+    let filteredList = [...products];
 
     if (selectedCategories.length > 0) {
-      list = list.filter(p => selectedCategories.includes(p.category));
+      filteredList = filteredList.filter(product => selectedCategories.includes(product.category));
     }
 
-    list = list.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
+    filteredList = filteredList.filter(product => product.price >= priceRange[0] && product.price <= priceRange[1]);
 
-    if (sortOption === 'priceAsc') list.sort((a, b) => a.price - b.price);
-    if (sortOption === 'priceDesc') list.sort((a, b) => b.price - a.price);
-    if (sortOption === 'nameAsc') list.sort((a, b) => a.name.localeCompare(b.name));
-    if (sortOption === 'nameDesc') list.sort((a, b) => b.name.localeCompare(a.name));
+    if (sortOption === 'priceAsc') filteredList.sort((a, b) => a.price - b.price);
+    if (sortOption === 'priceDesc') filteredList.sort((a, b) => b.price - a.price);
+    if (sortOption === 'nameAsc') filteredList.sort((a, b) => a.name.localeCompare(b.name));
+    if (sortOption === 'nameDesc') filteredList.sort((a, b) => b.name.localeCompare(a.name));
 
-    setFiltered(list);
+    setFilteredProducts(filteredList);
   }, [products, selectedCategories, priceRange, sortOption]);
 
   useEffect(() => {
     filterAndSort();
   }, [filterAndSort]);
 
-  const toggleCategory = (cat: string) => {
+  const toggleCategory = (category: string) => {
     setSelectedCategories(prev =>
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
     );
   };
 
@@ -65,7 +65,7 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
     setSelectedCategories([]);
     setPriceRange([0, maxPrice]);
     setSortOption('');
-    setFiltered(products);
+    setFilteredProducts(products);
   };
 
   return (
@@ -78,23 +78,23 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
       <View style={styles.filters}> 
         <Text style={styles.filterTitle}>Categories</Text> 
         <View style={styles.categoryList}>
-          {categories.map(cat => (
+          {categories.map(category => (
             <TouchableOpacity
-              key={cat}
+              key={category}
               style={styles.checkboxContainer}
-              onPress={() => toggleCategory(cat)}
+              onPress={() => toggleCategory(category)}
             >
               <View
                 style={[
                   styles.checkboxRow,
-                  { backgroundColor: categoryColors[cat] || '#ccc' },
-                  selectedCategories.includes(cat) && styles.selectedCheckboxRow
+                  { backgroundColor: categoryColors[category] || '#ccc' },
+                  selectedCategories.includes(category) && styles.selectedCheckboxRow
                 ]}
               >
                 <Text style={styles.checkboxText}>
-                  {selectedCategories.includes(cat) ? '☑' : '☐'}
+                  {selectedCategories.includes(category) ? '☑' : '☐'}
                 </Text>
-                <Text>{cat}</Text>
+                <Text>{category}</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -107,8 +107,8 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
           placeholder="Max Price"
           value={priceRange[1].toString()}
           onChangeText={(value) => {
-            const num = parseFloat(value) || 0;
-            setPriceRange([0, num]);
+            const enteredPrice = parseFloat(value) || 0;
+            setPriceRange([0, enteredPrice]);
           }}
         />
 
@@ -149,13 +149,13 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
       </View>
 
       <FlatList
-        data={filtered}
-        keyExtractor={item => item.id.toString()}
+        data={filteredProducts}
+        keyExtractor={product => product.id.toString()}
         contentContainerStyle={styles.flatListContent}
-        renderItem={({ item }) => {
+        renderItem={({ item: product }) => {
           const categoryStyle = {
-            backgroundColor: categoryColors[item.category] || '#fff',
-            borderLeftColor: categoryColors[item.category] || '#ccc',
+            backgroundColor: categoryColors[product.category] || '#fff',
+            borderLeftColor: categoryColors[product.category] || '#ccc',
             borderLeftWidth: 4,
           };
 
@@ -164,19 +164,19 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
               style={[styles.productCard, categoryStyle]}
               onPress={() =>
                 navigation.navigate('ProductDetails', {
-                  name: item.name,
-                  category: item.category,
-                  price: item.price,
-                  description: item.description ?? 'This is a dummy description for now.',
+                  name: product.name,
+                  category: product.category,
+                  price: product.price,
+                  description: product.description ?? 'This is a dummy description for now.',
                   imageUri: undefined,
                 })
               }
             >
-              <Text style={styles.productName}>{item.name}</Text>
-              <Text style={[styles.categoryText, { color: categoryColors[item.category] || '#000' }]}>
-                {item.category}
+              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={[styles.categoryText, { color: categoryColors[product.category] || '#000' }]}>
+                {product.category}
               </Text>
-              <Text>₱{item.price.toFixed(2)}</Text>
+              <Text>₱{product.price.toFixed(2)}</Text>
             </TouchableOpacity>
           );
         }}
