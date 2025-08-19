@@ -2,29 +2,34 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import productsData from '../data/products.json';
-
+import type { StackNavigationProp } from '@react-navigation/stack';
+import type { RootStackParamList } from '../App';
 
 interface Product {
   id: number;
   name: string;
   category: string;
   price: number;
+  description?: string;
 }
 
-export default function ProductList() {
+type ProductListNavigationProp = StackNavigationProp<RootStackParamList, 'ProductList'>;
+
+export default function ProductList({ navigation }: { navigation: ProductListNavigationProp }) {
+
   const [products] = useState<Product[]>(productsData);
   const [filtered, setFiltered] = useState<Product[]>(productsData);
   const categories = [...new Set(productsData.map(p => p.category))];
   const categoryColors: Record<string, string> = {
-  Pastries: '#f9d6faff',   
-  Breads: '#ec9ce2ff',     
-  Cakes: '#fc72a0ff',     
-  Cupcakes: '#fa8fc5ff',  
-};
+    Pastries: '#f9d6faff',   
+    Breads: '#ec9ce2ff',     
+    Cakes: '#fc72a0ff',     
+    Cupcakes: '#fa8fc5ff',  
+  };
 
   const maxPrice = products.length > 0 
-  ? Math.max(...products.map(p => p.price)) 
-  : 0;
+    ? Math.max(...products.map(p => p.price)) 
+    : 0;
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice]);
   const [sortOption, setSortOption] = useState<string>('');
@@ -73,135 +78,108 @@ export default function ProductList() {
       <View style={styles.filters}> 
         <Text style={styles.filterTitle}>Categories</Text> 
         <View style={styles.categoryList}>
-         
-        {categories.map(cat => (
-  <TouchableOpacity
-    key={cat}
-    style={styles.checkboxContainer}
-    onPress={() => toggleCategory(cat)}
-  >
-    <View
-      style={[
-        styles.checkboxRow,
-        { backgroundColor: categoryColors[cat] || '#ccc' },
-        selectedCategories.includes(cat) && styles.selectedCheckboxRow
-      ]}
-      
-    >
-      <Text style={styles.checkboxText}>
-        {selectedCategories.includes(cat) ? '☑' : '☐'}
-      </Text>
-      <Text>{cat}</Text>
-    </View>
-  </TouchableOpacity>
-))}
-
+          {categories.map(cat => (
+            <TouchableOpacity
+              key={cat}
+              style={styles.checkboxContainer}
+              onPress={() => toggleCategory(cat)}
+            >
+              <View
+                style={[
+                  styles.checkboxRow,
+                  { backgroundColor: categoryColors[cat] || '#ccc' },
+                  selectedCategories.includes(cat) && styles.selectedCheckboxRow
+                ]}
+              >
+                <Text style={styles.checkboxText}>
+                  {selectedCategories.includes(cat) ? '☑' : '☐'}
+                </Text>
+                <Text>{cat}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
 
         <Text style={styles.filterTitle}>Price Range</Text>
-          <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Max Price"
-              value={priceRange[1].toString()}
-              onChangeText={(value) => {
-              const num = parseFloat(value) || 0;
-              setPriceRange([0, num]);
-            }}
-          />
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder="Max Price"
+          value={priceRange[1].toString()}
+          onChangeText={(value) => {
+            const num = parseFloat(value) || 0;
+            setPriceRange([0, num]);
+          }}
+        />
+
         <Text style={styles.filterTitle}>Sort By</Text>
         <View style={styles.sortButtons}>
-  
-    <TouchableOpacity
-  style={[
-    styles.sortButton,
-    sortOption === 'priceAsc' && styles.activeSortButton
-  ]}
-  onPress={() => setSortOption('priceAsc')}
->
-  <Text style={styles.sortButtonText}>
-    Price <Text style={styles.arrowText}>↑</Text>
-  </Text>
-</TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.sortButton, sortOption === 'priceAsc' && styles.activeSortButton]}
+            onPress={() => setSortOption('priceAsc')}
+          >
+            <Text style={styles.sortButtonText}>Price ↑</Text>
+          </TouchableOpacity>
 
-<TouchableOpacity
-  style={[
-    styles.sortButton,
-    sortOption === 'priceDesc' && styles.activeSortButton
-  ]}
-  onPress={() => setSortOption('priceDesc')}
->
-  <Text style={styles.sortButtonText}>
-    Price <Text style={styles.arrowText}>↓</Text>
-  </Text>
-</TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.sortButton, sortOption === 'priceDesc' && styles.activeSortButton]}
+            onPress={() => setSortOption('priceDesc')}
+          >
+            <Text style={styles.sortButtonText}>Price ↓</Text>
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            style={[styles.sortButton, sortOption === 'nameAsc' && styles.activeSortButton]}
+            onPress={() => setSortOption('nameAsc')}
+          >
+            <Text style={styles.sortButtonText}>Name A-Z</Text>
+          </TouchableOpacity>
 
-  <TouchableOpacity
-    style={[
-      styles.sortButton,
-      sortOption === 'nameAsc' && styles.activeSortButton
-    ]}
-    onPress={() => setSortOption('nameAsc')}
-  >
-    <Text
-      style={[
-        styles.sortButtonText,
-        sortOption === 'nameAsc' && styles.activeSortButtonText
-      ]}
-    >
-      Name A-Z
-    </Text>
-  </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.sortButton, sortOption === 'nameDesc' && styles.activeSortButton]}
+            onPress={() => setSortOption('nameDesc')}
+          >
+            <Text style={styles.sortButtonText}>Name Z-A</Text>
+          </TouchableOpacity>
+        </View>
 
-  <TouchableOpacity
-    style={[
-      styles.sortButton,
-      sortOption === 'nameDesc' && styles.activeSortButton
-    ]}
-    onPress={() => setSortOption('nameDesc')}
-  >
-    <Text
-      style={[
-        styles.sortButtonText,
-        sortOption === 'nameDesc' && styles.activeSortButtonText
-      ]}
-    >
-      Name Z-A
-    </Text>
-  </TouchableOpacity>
-   
-</View>
-
-<TouchableOpacity style={styles.resetButton} onPress={resetFilters}>
-  <Text style={styles.resetButtonText}>Reset</Text>
-</TouchableOpacity>
-
-</View>
-
+        <TouchableOpacity style={styles.resetButton} onPress={resetFilters}>
+          <Text style={styles.resetButtonText}>Reset</Text>
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={filtered}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.flatListContent}
-  
-   renderItem={({ item }) => {
-  const categoryStyle = {
-    backgroundColor: categoryColors[item.category] || '#fff', 
-    borderLeftColor: categoryColors[item.category] || '#ccc',
-    borderLeftWidth: 4,
-  };
+        renderItem={({ item }) => {
+          const categoryStyle = {
+            backgroundColor: categoryColors[item.category] || '#fff',
+            borderLeftColor: categoryColors[item.category] || '#ccc',
+            borderLeftWidth: 4,
+          };
 
-  return (
-    <View style={[styles.productCard, categoryStyle]}>
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.categoryText}>{item.category}</Text>
-      <Text>₱{item.price.toFixed(2)}</Text>
-    </View>
-  );
-}}
-
-
+          return (
+            <TouchableOpacity
+              style={[styles.productCard, categoryStyle]}
+              onPress={() =>
+                navigation.navigate('ProductDetails', {
+                  name: item.name,
+                  category: item.category,
+                  price: item.price,
+                  description: item.description ?? 'This is a dummy description for now.',
+                  imageUri: undefined,
+                })
+              }
+            >
+              <Text style={styles.productName}>{item.name}</Text>
+              <Text style={[styles.categoryText, { color: categoryColors[item.category] || '#000' }]}>
+                {item.category}
+              </Text>
+              <Text>₱{item.price.toFixed(2)}</Text>
+            </TouchableOpacity>
+          );
+        }}
       />
     </SafeAreaView>
   );
