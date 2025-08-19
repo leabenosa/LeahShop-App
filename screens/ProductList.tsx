@@ -13,13 +13,17 @@ interface Product {
   description?: string;
 }
 
-type ProductListNavigationProp = StackNavigationProp<RootStackParamList, 'ProductList'>;
+type ProductListNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ProductList'
+>;
 
 export default function ProductList({ navigation }: { navigation: ProductListNavigationProp }) {
-
   const [products] = useState<Product[]>(productsData);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(productsData);
+
   const categories = [...new Set(productsData.map(product => product.category))];
+
   const categoryColors: Record<string, string> = {
     Pastries: '#f9d6faff',   
     Breads: '#ec9ce2ff',     
@@ -27,9 +31,8 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
     Cupcakes: '#fa8fc5ff',  
   };
 
-  const maxPrice = products.length > 0 
-    ? Math.max(...products.map(product => product.price)) 
-    : 0;
+  const maxPrice = products.length > 0 ? Math.max(...products.map(p => p.price)) : 0;
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice]);
   const [sortOption, setSortOption] = useState<string>('');
@@ -41,7 +44,9 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
       filteredList = filteredList.filter(product => selectedCategories.includes(product.category));
     }
 
-    filteredList = filteredList.filter(product => product.price >= priceRange[0] && product.price <= priceRange[1]);
+    filteredList = filteredList.filter(
+      product => product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
 
     if (sortOption === 'priceAsc') filteredList.sort((a, b) => a.price - b.price);
     if (sortOption === 'priceDesc') filteredList.sort((a, b) => b.price - a.price);
@@ -70,13 +75,15 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.shopName}>Leah’s Shop</Text>
       </View>
 
-      <View style={styles.filters}> 
-        <Text style={styles.filterTitle}>Categories</Text> 
+      {/* Filters */}
+      <View style={styles.filters}>
+        <Text style={styles.filterTitle}>Categories</Text>
         <View style={styles.categoryList}>
           {categories.map(category => (
             <TouchableOpacity
@@ -88,7 +95,7 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
                 style={[
                   styles.checkboxRow,
                   { backgroundColor: categoryColors[category] || '#ccc' },
-                  selectedCategories.includes(category) && styles.selectedCheckboxRow
+                  selectedCategories.includes(category) && styles.selectedCheckboxRow,
                 ]}
               >
                 <Text style={styles.checkboxText}>
@@ -106,7 +113,7 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
           keyboardType="numeric"
           placeholder="Max Price"
           value={priceRange[1].toString()}
-          onChangeText={(value) => {
+          onChangeText={value => {
             const enteredPrice = parseFloat(value) || 0;
             setPriceRange([0, enteredPrice]);
           }}
@@ -148,6 +155,7 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
         </TouchableOpacity>
       </View>
 
+      {/* Product List */}
       <FlatList
         data={filteredProducts}
         keyExtractor={product => product.id.toString()}
