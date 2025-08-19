@@ -1,17 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Button } from "react-native";
+import type { RootStackParamList } from '../App';
 import type { StackScreenProps } from "@react-navigation/stack";
 
-type RootStackParamList = {
-  ProductList: undefined;
-  ProductDetails: {
-    name: string;
-    category: string;
-    price: number;
-    description: string;
-    imageUri?: string;
-  };
-};
 
 type Props = StackScreenProps<RootStackParamList, "ProductDetails">;
 
