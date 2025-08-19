@@ -3,17 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductList from './screens/ProductList';
 import ProductDetails from './screens/ProductDetails';
+import { RootStackParamList } from './types/navigation';
 
-export type RootStackParamList = {
-  ProductList: undefined;
-  ProductDetails: { 
-    name: string;
-    category: string;
-    price: number;
-    description: string; 
-    imageUri?: string;
-  };
-};
 
 const Stack = createStackNavigator<RootStackParamList>();
 

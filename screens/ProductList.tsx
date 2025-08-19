@@ -3,7 +3,7 @@ import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import productsData from '../data/products.json';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import type { RootStackParamList } from '../App';
+import type { RootStackParamList } from '../types/navigation';
 
 interface Product {
   id: number;
