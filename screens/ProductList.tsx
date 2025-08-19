@@ -177,6 +177,7 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
         style={[styles.productCard, categoryStyle]}
         onPress={() =>
           navigation.navigate('ProductDetails', {
+             id: product.id,  
             name: product.name,
             category: product.category,
             price: product.price,
