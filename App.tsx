@@ -11,7 +11,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={"ProductList" as keyof RootStackParamList}>
+       <Stack.Navigator initialRouteName="ProductList">
         <Stack.Screen
           name="ProductList"
           component={ProductList}
