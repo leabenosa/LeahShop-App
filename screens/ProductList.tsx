@@ -155,40 +155,50 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
         </TouchableOpacity>
       </View>
 
-      {/* Product List */}
-      <FlatList
-        data={filteredProducts}
-        keyExtractor={product => product.id.toString()}
-        contentContainerStyle={styles.flatListContent}
-        renderItem={({ item: product }) => {
-          const categoryStyle = {
-            backgroundColor: categoryColors[product.category] || '#fff',
-            borderLeftColor: categoryColors[product.category] || '#ccc',
-            borderLeftWidth: 4,
-          };
+      
+<FlatList
+  data={filteredProducts}
+  keyExtractor={product => product.id.toString()}
+  contentContainerStyle={styles.flatListContent}
+  renderItem={({ item: product }) => {
+    const categoryStyle = {
+      backgroundColor: categoryColors[product.category] || '#fff',
+      borderLeftColor: categoryColors[product.category] || '#ccc',
+      borderLeftWidth: 4,
+    };
 
-          return (
-            <TouchableOpacity
-              style={[styles.productCard, categoryStyle]}
-              onPress={() =>
-                navigation.navigate('ProductDetails', {
-                  name: product.name,
-                  category: product.category,
-                  price: product.price,
-                  description: product.description ?? 'This is a dummy description for now.',
-                  imageUri: undefined,
-                })
-              }
-            >
-              <Text style={styles.productName}>{product.name}</Text>
-              <Text style={[styles.categoryText, { color: categoryColors[product.category] || '#000' }]}>
-                {product.category}
-              </Text>
-              <Text>₱{product.price.toFixed(2)}</Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
+    const formattedPrice = product.price.toLocaleString("en-PH", {
+      style: "currency",
+      currency: "PHP",
+    });
+
+    return (
+      <TouchableOpacity
+        style={[styles.productCard, categoryStyle]}
+        onPress={() =>
+          navigation.navigate('ProductDetails', {
+            name: product.name,
+            category: product.category,
+            price: product.price,
+            description: product.description ?? 'This is a dummy description for now.',
+            imageUri: undefined,
+          })
+        }
+      >
+        <Text style={styles.productName}>{product.name}</Text>
+        <Text
+          style={[
+            styles.categoryText,
+            { color: categoryColors[product.category] || '#000' },
+          ]}
+        >
+          {product.category}
+        </Text>
+        <Text>{formattedPrice}</Text>
+      </TouchableOpacity>
+    );
+  }}
+/>
     </SafeAreaView>
   );
 }

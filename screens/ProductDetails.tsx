@@ -1,12 +1,25 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Button } from "react-native";
-import type { RootStackParamList } from "../types/navigation";
+import type { RootStackParamList } from '../types/navigation';
 import type { StackScreenProps } from "@react-navigation/stack";
 
 type Props = StackScreenProps<RootStackParamList, "ProductDetails">;
 
+const categoryColors: Record<string, string> = {
+  Pastries: '#f9d6faff',   
+  Breads: '#ec9ce2ff',     
+  Cakes: '#fc72a0ff',     
+  Cupcakes: '#fa8fc5ff',  
+};
+
 export default function ProductDetails({ route }: Props) {
   const { name, category, price, description, imageUri } = route.params;
+
+  const categoryColor = categoryColors[category] || "#888";
+  const formattedPrice = price.toLocaleString("en-PH", {
+    style: "currency",
+    currency: "PHP",
+  });
 
   return (
     <View style={styles.container}>
@@ -15,10 +28,9 @@ export default function ProductDetails({ route }: Props) {
         style={styles.image}
         resizeMode="cover"
       />
-
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.category}>{category}</Text>
-      <Text style={styles.price}>₱{price.toFixed(2)}</Text>
+      <Text style={[styles.category, { color: categoryColor }]}>{category}</Text>
+      <Text style={styles.price}>{formattedPrice}</Text>
       <Text style={styles.description}>{description}</Text>
 
       <Button
@@ -36,35 +48,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     alignSelf: "center",
     marginBottom: 20,
-    borderRadius: 12,
   },
   name: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 8,
-    textAlign: "center",
   },
   category: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 8,
-    color: "#888",
-    textAlign: "center",
   },
   price: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 12,
-    textAlign: "center",
-    color: "#e91e63",
   },
   description: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
-    lineHeight: 22,
-    textAlign: "center",
   },
 });
