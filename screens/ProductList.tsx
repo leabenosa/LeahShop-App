@@ -78,7 +78,7 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
       {/* Header */}
       <View style={styles.header}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.shopName}>Leah’s Shop</Text>
+        <Text style={styles.shopName}>Leah's Shop</Text>
       </View>
 
       {/* Filters */}
