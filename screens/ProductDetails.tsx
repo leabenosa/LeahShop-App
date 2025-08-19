@@ -6,20 +6,14 @@ import type { StackScreenProps } from "@react-navigation/stack";
 type Props = StackScreenProps<RootStackParamList, "ProductDetails">;
 
 const categoryColors: Record<string, string> = {
-  Pastries: '#f9d6faff',   
-  Breads: '#ec9ce2ff',     
-  Cakes: '#fc72a0ff',     
-  Cupcakes: '#fa8fc5ff',  
+  Pastries: '#f9d6faff',
+  Breads: '#ec9ce2ff',
+  Cakes: '#fc72a0ff',
+  Cupcakes: '#fa8fc5ff',
 };
 
 export default function ProductDetails({ route }: Props) {
   const { name, category, price, description, imageUri } = route.params;
-
-  const categoryColor = categoryColors[category] || "#888";
-  const formattedPrice = price.toLocaleString("en-PH", {
-    style: "currency",
-    currency: "PHP",
-  });
 
   return (
     <View style={styles.container}>
@@ -29,8 +23,12 @@ export default function ProductDetails({ route }: Props) {
         resizeMode="cover"
       />
       <Text style={styles.name}>{name}</Text>
-      <Text style={[styles.category, { color: categoryColor }]}>{category}</Text>
-      <Text style={styles.price}>{formattedPrice}</Text>
+
+      <Text style={[styles.category, { color: categoryColors[category] || "#888" }]}>
+        {category}
+      </Text>
+
+      <Text style={styles.price}>{`₱${price.toFixed(2)}`}</Text>
       <Text style={styles.description}>{description}</Text>
 
       <Button
