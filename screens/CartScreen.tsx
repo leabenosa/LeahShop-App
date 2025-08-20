@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useCart } from "../context/CartContext";
@@ -39,7 +38,7 @@ export default function CartScreen() {
             data={cartItems}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={styles.flatListContent}
           />
           <View style={styles.footer}>
             <Text style={styles.total}>Total: ₱{total.toFixed(2)}</Text>
@@ -89,4 +88,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   clearButtonText: { color: "white", fontWeight: "bold" },
+  flatListContent: {
+    paddingBottom: 20,
+  },
 });
