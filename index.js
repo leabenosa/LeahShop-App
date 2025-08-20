@@ -4,17 +4,34 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import CartScreen from "./screens/CartScreen";
-import ProductScreen from "./screens/ProductScreen";
+import ProductDetails from "./screens/ProductDetails";
 import ProductList from "./screens/ProductList";
 
 import { CartProvider } from "./context/CartContext";
-import { CartIcon } from "./components/CartIcon"; 
+import { CartIcon } from "./components/CartIcon";
 
 const APP_NAME = "LeahShop";
 const Stack = createNativeStackNavigator();
 
-const ProductListHeaderRight = ({ navigation }) => <CartIcon navigation={navigation} />;
-const ProductScreenHeaderRight = ({ navigation }) => <CartIcon navigation={navigation} />;
+
+function CartHeaderRight({ navigation }) {
+  return <CartIcon navigation={navigation} />;
+}
+
+
+const productListOptions = ({ navigation }) => ({
+  title: "Products",
+  headerRight: () => <CartHeaderRight navigation={navigation} />,
+});
+
+const productDetailsOptions = ({ navigation }) => ({
+  title: "Product Details",
+  headerRight: () => <CartHeaderRight navigation={navigation} />,
+});
+
+const cartOptions = {
+  title: "Your Cart",
+};
 
 const App = () => (
   <CartProvider>
@@ -23,23 +40,17 @@ const App = () => (
         <Stack.Screen
           name="ProductList"
           component={ProductList}
-          options={{
-            title: "Products",
-            headerRight: ProductListHeaderRight,
-          }}
+          options={productListOptions}
         />
         <Stack.Screen
           name="Product"
-          component={ProductScreen}
-          options={{
-            title: "Product Details",
-            headerRight: ProductScreenHeaderRight,
-          }}
+          component={ProductDetails}
+          options={productDetailsOptions}
         />
         <Stack.Screen
           name="Cart"
           component={CartScreen}
-          options={{ title: "Your Cart" }}
+          options={cartOptions}
         />
       </Stack.Navigator>
     </NavigationContainer>
